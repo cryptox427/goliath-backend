@@ -7,21 +7,44 @@ const LimitNumber = 200;
 const ItemNumber = 8;
 const MiniInterval = 60;
 
+const UpdateInterval = 86400000;
+const defaultContractAddress = "0xf76179bb0924ba7da8e7b7fc2779495d7a7939d8";
+const defaultTimeInterval = "1200";
+const defaultpriceInterval = "0.0001";
+const from = "2022-07-12";
+const to = "2022-08-19";
+
+function intervalFunc() {
+    saveSalesData(defaultContractAddress, defaultTimeInterval);
+    saveListingData(defaultContractAddress, defaultTimeInterval);
+    assetsForSales(defaultContractAddress, defaultTimeInterval);
+    getSellWall(defaultContractAddress, defaultpriceInterval);
+    getHolderInfoByTime(defaultContractAddress, from, to);
+}
+setInterval(intervalFunc, UpdateInterval);
+
 const delay = (time) => {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
 
 const  getCollectionInfoV1  = async (pageNumber, pageLimit) => {
     const collectionData = (await axios.get(`https://api.opensea.io/api/v1/collections?offset=${pageNumber}&limit=${LimitNumber}`, options)).data;
-    return collectionData;
+    console.log(collectionData);
+    const response = {};
+    const key = "collectionsInfo";
+    response[key] = [];
+    collectionData.collections.map(item => {
+      if(item['primary_asset_contracts'] != null && item['primary_asset_contracts'] != [] && item['primary_asset_contracts'].length > 0) {
+        response[key].push(item);
+      }
+    })
+    return response;
 }
 
 
 const getSalesDataAssets =async (contractAddress) => {
     const collectionStats = (await axios.get(`https://api.opensea.io/api/v1/events?asset_contract_address=${contractAddress}&limit=${LimitNumber}&event_type=successful`, options)).data;
-    // const nextParam = collectionStats['next'];
 
-    console.log(collectionStats["asset_events"]);
     const assetData = collectionStats["asset_events"];
 
     const salesData = {};
@@ -54,8 +77,8 @@ const getSalesDataAssets =async (contractAddress) => {
         }
     });
 
-    console.log(salesData[key].length);
-    return assetData; 
+    console.log(salesData[key]);
+    return salesData; 
 }
 
 const getListingDataAssets =async (contractAddress) => {
@@ -185,7 +208,7 @@ const saveListingData = async (contractAddress, timeInterval) => {
             // console.log("1 record inserted");
         });
     }    
-    return salesStats;
+    return listingHistory;
 }
 
 const assetsForSales = async (contractAddress, timeInterval) => {
@@ -410,6 +433,7 @@ const getHolderInfoByTime = async (contractAddress, from, to) => {
             data: record
         })
     }    
+
     return result;  
 }
 
