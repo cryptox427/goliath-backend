@@ -4,7 +4,8 @@
   "description": "Social network for developers",
   "main": "server.js",
   "engines": {
-    "node": "14.18.1"
+    "node": "14.18.1",
+    "npm": "8.3.0"
   },
   "scripts": {
     "start": "node server",
