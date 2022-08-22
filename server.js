@@ -7,6 +7,7 @@ const cors = require('cors');
 const fs = require('fs');
 
 var http = require('http').createServer(app);
+const PORT = process.env.PORT || 5000;
 
 app.use(cors({
     origin: '*'
@@ -26,6 +27,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use('/api/collectionInfo', require('./routes/api/collectionInfo'));
 
-http.listen(5000, ()=> {
+http.listen(PORT, ()=> {
      console.log('listening on *:5000');
 });
