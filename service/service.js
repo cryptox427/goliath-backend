@@ -140,13 +140,14 @@ const saveSalesData = async (contractAddress, timeInterval) => {
         var volume = 0;
         var itemNum = 0;
         salesStats['asset_events'].map(item => {
-            if(item['listing_time'] == null) {
+            if (item['listing_time'] == null) {
                 const unix = new Date(item['event_timestamp']);
-                if(unix.getTime() < timeCount && unix.getTime() > (timeCount - 1000*60*timeInterval / MiniInterval)) {
-                    volume += item['total_price'] / (10**18);
-                    itemNum ++;
+                if (unix.getTime() < timeCount && unix.getTime() > (timeCount - 1000 * 60 * timeInterval / MiniInterval)) {
+                    volume += item['total_price'] / (10 ** 18);
+                    itemNum++;
                 }
             }
+        }
         console.log(' item num' + itemNum + ' volume' + volume);
 
         const record = {};
