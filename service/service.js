@@ -147,7 +147,7 @@ const saveSalesData = async (contractAddress, timeInterval) => {
                     itemNum++;
                 }
             }
-        }
+        })
         console.log(' item num' + itemNum + ' volume' + volume);
 
         const record = {};
