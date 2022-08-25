@@ -217,7 +217,7 @@ const assetsForSales = async (contractAddress, timeInterval) => {
     const salesStats = (await axios.get(`https://api.opensea.io/api/v1/events?asset_contract_address=${contractAddress}&occurred_before=${formatDate(nowTime)}&occurred_after=${formatDate(prevTime)}&event_type=successful`, options)).data;
     // console.log(salesStats);
     const listingHistory = {};
-    var key = "ListingHistory";
+    var key = "AssetsForSales";
     listingHistory[key] = [];
     var query = "DELETE FROM assetsforsales";
     sql.query(query, function (err, result) {
