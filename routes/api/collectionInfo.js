@@ -5,7 +5,7 @@ const {getCollectionInfoV1, getSalesDataAssets, getListingDataAssets, saveSalesD
   assetsForSales, getSellWall, getHolderInfo, getHolderInfoByTime
 } = require('../../service/service');
 
-
+const {calculatorBuyRank} =require('../../service/api');
 // @route    GET api/auth
 // @desc     Get user by token
 // @access   Private
@@ -37,6 +37,7 @@ router.get('/getSalesDataAssets/:contractAddress', async (req, res) => {
 router.get('/getListingDataAssets/:contractAddress', async (req, res) => {
   try {
     const contractAddress = req.params.contractAddress;
+    console.log('contract address---', contractAddress)
 
     const assetData = await getListingDataAssets(contractAddress);
     res.json(assetData);
