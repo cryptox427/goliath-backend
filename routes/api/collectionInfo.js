@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const {getCollectionInfoV1, getSalesDataAssets, getListingDataAssets, saveSalesData, saveListingData,
-  assetsForSales, getSellWall, getHolderInfo, getHolderInfoByTime
+  assetsForSales, getSellWall, getHolderInfo, getHolderInfoByTime, getFloorPrice
 } = require('../../service/service');
 
 const {calculatorBuyRank} =require('../../service/api');
@@ -104,7 +104,16 @@ router.get('/getHolderInfo/:contractAddress', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
-
+router.get('/getFloorPrice/:contractAddress', async (req, res) => {
+  try {
+    const contractAddress = req.params.contractAddress;
+    const assetData = await getFloorPrice(contractAddress);
+    res.json(assetData);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 router.get('/getHolderInfoByTime/:contractAddress/:from/:to', async (req, res) => {
   try {
     const contractAddress = req.params.contractAddress;
