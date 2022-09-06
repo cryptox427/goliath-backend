@@ -1,4 +1,4 @@
-const multer = require('multer');
+// const multer = require('multer');
 const jwt = require("jsonwebtoken");
 var request = require("request");
 const sql = require("../config/mySql");

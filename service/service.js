@@ -50,7 +50,7 @@ const getSalesDataAssets =async (contractAddress) => {
     const salesData = {};
     var key = "Sales";
     salesData[key] = [];
-
+    
     assetData.forEach(item => {
         if(salesData[key].length < 8) {
             if(item['listing_time'] == null) {
@@ -61,7 +61,7 @@ const getSalesDataAssets =async (contractAddress) => {
 
                 if(item['payment_token'] !== null)
                     record['market_image_url'] = item['payment_token']['image_url'];
-                else
+                else 
                     record['market_image_url'] = '';
 
                 record['sold_date'] = item['event_timestamp'].replace(/T/, ' ').replace(/\..+/, '');
@@ -69,15 +69,15 @@ const getSalesDataAssets =async (contractAddress) => {
 
                 if(item['asset']['name'].indexOf('#') > 0)
                     record['rarity'] = Number(item['asset']['name'].split('#')[1]);
-                else
-                    record['rarity'] = 0;
+                else 
+                    record['rarity'] = 0;                   
                 salesData[key].push(record);
             }
         }
     });
 
     console.log(salesData[key]);
-    return salesData;
+    return salesData; 
 }
 
 const getListingDataAssets =async (contractAddress) => {
@@ -89,7 +89,7 @@ const getListingDataAssets =async (contractAddress) => {
     const salesData = {};
     var key = "Listing";
     salesData[key] = [];
-
+    
     assetData.forEach(item => {
         if(salesData[key].length < 8) {
             if(item['listing_time'] != null) {
@@ -101,7 +101,7 @@ const getListingDataAssets =async (contractAddress) => {
 
                 if(item['payment_token'] !== null)
                     record['market_image_url'] = item['payment_token']['image_url'];
-                else
+                else 
                     record['market_image_url'] = '';
 
                 record['listing_date'] = item['event_timestamp'].replace(/T/, ' ').replace(/\..+/, '');
@@ -109,7 +109,7 @@ const getListingDataAssets =async (contractAddress) => {
 
                 if(item['asset']['name'].indexOf('#') > 0)
                     record['rarity'] = Number(item['asset']['name'].split('#')[1]);
-                else
+                else 
                     record['rarity'] = 0;
                 record['buy_rank'] =  Math.floor(record['rarity'] /10) + 25;
                 salesData[key].push(record);
@@ -117,7 +117,7 @@ const getListingDataAssets =async (contractAddress) => {
         }
     });
     // console.log(salesData[key]);
-    return salesData;
+    return salesData; 
 }
 
 
@@ -148,7 +148,7 @@ const saveSalesData = async (contractAddress, timeInterval) => {
             }
         })
         console.log(' item num' + itemNum + ' volume' + volume);
-
+        
         const record = {};
         record['start_date'] = formatDate(new Date(timeCount - 1000*60*timeInterval / MiniInterval));
         record['end_date'] = formatDate(new Date(timeCount));
@@ -157,12 +157,12 @@ const saveSalesData = async (contractAddress, timeInterval) => {
         record['item_num'] = itemNum;
 
         salesHistory[key].push(record);
-
+        
         sql.query(`INSERT INTO sales (start_date, end_date, volume, avg_volume, item_num) VALUES ('${formatDate(new Date(timeCount - 1000*60*timeInterval / MiniInterval))}', '${formatDate(new Date(timeCount))}', ${volume}, ${ itemNum == 0 ? volume = 0 : volume / itemNum}, ${itemNum})`, function (err) {
             if (err) throw err;
             console.log("1 record inserted");
         });
-    }
+    }    
     return salesHistory;
 }
 
@@ -191,7 +191,7 @@ const saveListingData = async (contractAddress, timeInterval) => {
                 }
             }
         })
-
+        
         const record = {};
         record['start_date'] = formatDate(new Date(timeCount - 1000*60*timeInterval / MiniInterval));
         record['end_date'] = formatDate(new Date(timeCount));
@@ -214,7 +214,7 @@ const saveListingData = async (contractAddress, timeInterval) => {
             if (err) throw err;
             // console.log("1 record inserted");
         });
-    }
+    } 
 
     return listingHistory;
 }
@@ -245,7 +245,7 @@ const assetsForSales = async (contractAddress, timeInterval) => {
                 }
             }
         })
-
+        
         const record = {};
         record['start_date'] = timeCount - 1000*60*timeInterval / (MiniInterval * 100);
         record['end_date'] = timeCount;
@@ -253,15 +253,15 @@ const assetsForSales = async (contractAddress, timeInterval) => {
         record['avg_volume'] = itemNum == 0 ? volume = 0 : volume / itemNum;
         record['item_num'] = itemNum;
         listingHistory[key].push(record);
-
+        
         sql.query(`INSERT INTO assetsForSales (start_date, end_date, volume, avg_volume, item_num) VALUES ('${timeCount - 1000*60*timeInterval / (MiniInterval * 100)}', '${timeCount}', ${volume}, ${ itemNum == 0 ? volume = 0 : volume / itemNum}, ${itemNum})`, function (err) {
             if (err) throw err;
             // console.log("1 record inserted");
         });
-    }
+    }    
     return listingHistory;
 }
-
+ 
 const getSellWall = async (contractAddress, priceInterval) => {
     const collectionStats = (await axios.get(`https://api.opensea.io/api/v1/events?asset_contract_address=${contractAddress}&limit=${LimitNumber}&event_type=successful`, options)).data;
     const assetData = collectionStats["asset_events"];
@@ -281,7 +281,7 @@ const getSellWall = async (contractAddress, priceInterval) => {
     }
 
     assetData.map(item => {
-        if(item['listing_time'] == null) {
+        if(item['listing_time'] == null) {            
             tempArray[parseInt((item['total_price'] / (10 ** 18))/priceInterval)]++;
         }
     })
@@ -322,7 +322,7 @@ const getHolderInfo = async (contractAddress) => {
                     token_id: tData.token_id,
                 });
             }
-        }
+        }    
         index += 50;
         await delay(300);
         } catch (err) {
@@ -364,12 +364,12 @@ const getHolderInfo = async (contractAddress) => {
         } else if (item ['cnt'] <= 46 && item['cnt'] >= 7 ) {
             record[3]['count']++;
         }
-    })
+    })    
     record.map(item => {
         item['percentage'] = (item['count'] / array.length * 100).toFixed(3) + "%";
     })
     console.log(record);
-    return record;
+    return record;    
 }
 
 const getHolderInfoByTime = async (contractAddress, from, to) => {
@@ -387,7 +387,7 @@ const getHolderInfoByTime = async (contractAddress, from, to) => {
     const response = [];
     for(var timeCnt = nowTime.getTime(); timeCnt < prevTime.getTime(); timeCnt += 86400000) {
         const holderInfo = (await axios.get(`https://api.opensea.io/api/v1/events?asset_contract_address=${contractAddress}&occurred_before=${formatDate(new Date(timeCnt+86400000))}&occurred_after=${formatDate(new Date(timeCnt))}&event_type=successful`, options)).data
-
+    
         holderInfo.asset_events.map(item => {
             response.push({
                 address: item.asset.owner.address,
@@ -429,10 +429,10 @@ const getHolderInfoByTime = async (contractAddress, from, to) => {
             } else if (item ['cnt'] <= 46 && item['cnt'] >= 7 ) {
                 record[3]['count']++;
             }
-        })
+        })    
         record.map(item => {
             item['percentage'] = (item['count'] / array.length * 100).toFixed(3) + "%";
-        })
+        })  
         sql.query(`INSERT INTO holder (ExDate, data) VALUES ('${formatDate(new Date(timeCnt))}', '${record}')`, function (err) {
             if (err) throw err;
             console.log("1 record inserted");
@@ -441,8 +441,8 @@ const getHolderInfoByTime = async (contractAddress, from, to) => {
             ExDate: formatDate(new Date(timeCnt)),
             data: record
         })
-    }
-    return result;
+    }    
+    return result;  
 }
 const getFloorPrice = async (contractAddress) => {
     const collectionStats = (await axios.get(`https://api.opensea.io/api/v1/collection/${contractAddress}`, options)).data;

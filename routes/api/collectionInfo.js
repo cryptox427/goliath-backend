@@ -37,7 +37,6 @@ router.get('/getSalesDataAssets/:contractAddress', async (req, res) => {
 router.get('/getListingDataAssets/:contractAddress', async (req, res) => {
   try {
     const contractAddress = req.params.contractAddress;
-    console.log('contract address---', contractAddress)
 
     const assetData = await getListingDataAssets(contractAddress);
     res.json(assetData);
@@ -104,6 +103,7 @@ router.get('/getHolderInfo/:contractAddress', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
 router.get('/getFloorPrice/:contractAddress', async (req, res) => {
   try {
     const contractAddress = req.params.contractAddress;
@@ -114,6 +114,7 @@ router.get('/getFloorPrice/:contractAddress', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
 router.get('/getHolderInfoByTime/:contractAddress/:from/:to', async (req, res) => {
   try {
     const contractAddress = req.params.contractAddress;
